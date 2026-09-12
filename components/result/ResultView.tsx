@@ -36,6 +36,12 @@ export function ResultView({
     [plan.days],
   );
 
+  // 우천 대안이 "무엇 대신"인지 보여주려면 id 를 제목으로 풀어야 한다 (E2-S12).
+  const activityTitles = useMemo(
+    () => new Map(plan.days.flatMap((d) => d.items.map((i) => [i.id, i.title] as const))),
+    [plan.days],
+  );
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -101,7 +107,11 @@ export function ResultView({
 
       {/* 5. 우천 시 대안 */}
       <div data-result-section>
-        <RainyDayPanel rainyDay={plan.rainyDay} dayThemes={dayThemes} />
+        <RainyDayPanel
+                rainyDay={plan.rainyDay}
+                dayThemes={dayThemes}
+                activityTitles={activityTitles}
+              />
       </div>
 
       <div data-result-section>

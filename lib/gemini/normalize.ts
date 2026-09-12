@@ -256,10 +256,18 @@ export function normalizePlan(
 
   const totalBudget: MoneyEstimate = { ...total, basis: '전체 예상 비용 (서버 재계산)' };
 
+  // 대체 대상 id 를 서버가 검증한다. 모델은 존재하지 않는 id 를 지어낼 수 있고,
+  // 그러면 화면에 "OO 대신" 이 빈 칸으로 나온다. 총계를 다시 계산하는 것(R8)과 같은 이유로
+  // 여기서도 서버를 권위로 둔다 — 모델이 준 참조를 그대로 믿지 않는다.
+  const knownActivityIds = new Set(days.flatMap((d) => d.items.map((i) => i.id)));
+
   const alternatives: RainyAlternative[] = draft.rainyDay.alternatives.map((alt) => ({
     id: alt.id,
     dayIndex: alt.dayIndex,
-    replacesActivityId: alt.replacesActivityId,
+    replacesActivityId:
+      alt.replacesActivityId && knownActivityIds.has(alt.replacesActivityId)
+        ? alt.replacesActivityId
+        : null,
     title: alt.title,
     areaName: alt.areaName,
     description: alt.description,

@@ -429,6 +429,26 @@ describe('우천 대안', () => {
     expect(run(d).rainyDay.alternatives[0]?.replacesActivityId).toBeNull();
   });
 
+  it('존재하지 않는 id 를 모델이 지어내면 서버가 null 로 정리한다', () => {
+    // 그대로 통과시키면 화면의 "OO 대신" 이 빈 칸이 된다.
+    const d = draft();
+    const alt = d.rainyDay.alternatives[0];
+    if (!alt) throw new Error('fixture');
+    alt.replacesActivityId = 'd9-a9-존재하지-않음';
+
+    expect(run(d).rainyDay.alternatives[0]?.replacesActivityId).toBeNull();
+  });
+
+  it('다른 날의 항목 id 라도 실재하면 유지한다 (dayIndex 와의 정합성은 모델의 몫)', () => {
+    const d = draft();
+    const day = d.days[0];
+    const alt = d.rainyDay.alternatives[0];
+    if (!day || !alt) throw new Error('fixture');
+    alt.replacesActivityId = 'd1-a2';
+
+    expect(run(d).rainyDay.alternatives[0]?.replacesActivityId).toBe('d1-a2');
+  });
+
   it('대안의 비용도 추정 객체로 조립된다', () => {
     const cost = run().rainyDay.alternatives[0]?.cost;
     expect(cost?.amount).toBe(15_000);

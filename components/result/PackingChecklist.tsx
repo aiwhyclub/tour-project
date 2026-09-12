@@ -62,7 +62,8 @@ export function PackingChecklist({ checklist }: { checklist: PackingChecklistDat
           </span>
         </header>
 
-        <ul className="grid gap-2 p-5 sm:grid-cols-2 sm:p-6">
+        {/* 768~1023px 는 2열로 둔다. 그 폭에서 3열이면 체크박스+라벨+사유+배지 2개가 뭉개진다. */}
+        <ul className="grid gap-2 p-5 sm:grid-cols-2 sm:p-6 lg:grid-cols-3">
           {checklist.items.map((item) => {
             const isChecked = checked.has(item.id);
             return (
