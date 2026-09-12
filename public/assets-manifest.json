@@ -39,17 +39,6 @@
       "usedIn": "Hero 배경 시퀀스 3번"
     },
     {
-      "file": "public/images/accent-sunset-sea.jpg",
-      "source": "Pexels",
-      "sourceUrl": "https://www.pexels.com/photo/1032650/",
-      "cdnUrl": "https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/",
-      "attributionRequired": false,
-      "modified": "리사이즈(w=1200) 및 압축만 적용",
-      "usedIn": "중간 섹션 강조 비주얼"
-    },
-    {
       "file": "public/fonts/PretendardVariable.subset.woff2",
       "source": "Pretendard (orioncactus/pretendard) v1.3.9",
       "sourceUrl": "https://github.com/orioncactus/pretendard",
@@ -76,6 +65,17 @@
       "reason": "빌드 환경에서 Pexels 영상 CDN 이 403, Pixabay 영상 경로가 404 로 접근 불가했다.",
       "substitute": "GSAP 로 구동하는 Ken Burns 사진 시퀀스(교차 디졸브 + 패럴랙스 줌)로 대체했다. 모션그래픽 요구를 충족하면서 용량이 작고, 영상 자동재생 거부 실패 경로가 아예 사라진다.",
       "dropInSlot": "components/hero/HeroMediaLayer.tsx 의 HERO_FRAMES 를 영상으로 교체하면 된다. 교체 시 이 매니페스트에 출처·라이선스를 반드시 추가할 것."
+    }
+  ],
+  "removed": [
+    {
+      "file": "public/images/accent-sunset-sea.jpg",
+      "source": "Pexels",
+      "sourceUrl": "https://www.pexels.com/photo/1032650/",
+      "cdnUrl": "https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg",
+      "license": "Pexels License",
+      "reason": "\"중간 섹션 강조 비주얼\"로 취득했으나 그 섹션이 구현되지 않았다. 코드 참조 0건. 쓰이지 않는 277KB 바이너리를 저장소에 두는 대신 출처만 남긴다. 중간 섹션을 만들면 위 sourceUrl 에서 다시 받아 assets 로 옮길 것.",
+      "removedAt": "2026-09-12"
     }
   ]
 }

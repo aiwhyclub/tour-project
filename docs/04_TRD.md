@@ -317,7 +317,6 @@ tour-project/
 │   ├── images/hero-01-tropical-beach.jpg   Hero 시퀀스 1 / LCP 포스터
 │   ├── images/hero-02-palm-shore.jpg       Hero 시퀀스 2
 │   ├── images/hero-03-bali-gate.jpg        Hero 시퀀스 3
-│   ├── images/accent-sunset-sea.jpg        중간 섹션 강조 비주얼
 │   └── assets-manifest.json              * R6. policy / assets / rejected / notObtained
 ├── scripts/                              실측용 일회성 프로브 (_api-probe, _schema-probe, _bisect,
 │                                         _interactions-probe, _locale-probe, _smoke 등).
