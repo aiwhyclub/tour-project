@@ -10,6 +10,7 @@ import { SiteFooter } from '@/components/layout/SiteFooter';
 import { Section } from '@/components/layout/Section';
 import { HeroSection } from '@/components/hero/HeroSection';
 import { PlanForm } from '@/components/form/PlanForm';
+import { Reveal } from '@/components/motion/Reveal';
 import { LoadingView } from '@/components/state/LoadingView';
 import { ErrorView } from '@/components/state/ErrorView';
 import { ResultView } from '@/components/result/ResultView';
@@ -157,12 +158,15 @@ export function PlanExperience() {
                 title="어떤 여행을 계획하고 계신가요?"
                 description="조건을 채우고 버튼을 누르면 일자별 코스와 예상 예산표, 준비물, 우천 시 대안을 한 번에 만들어 드립니다."
               >
-                <PlanForm
-                  initial={state.lastRequest}
-                  serverFieldErrors={state.error?.fields ?? null}
-                  submitting={loading}
-                  onSubmit={handleSubmit}
-                />
+                {/* 스크롤 진입 연출 (E1-S09 · F-35). gsap.from 이라 JS 가 실패해도 폼은 보인다. */}
+                <Reveal>
+                  <PlanForm
+                    initial={state.lastRequest}
+                    serverFieldErrors={state.error?.fields ?? null}
+                    submitting={loading}
+                    onSubmit={handleSubmit}
+                  />
+                </Reveal>
               </Section>
             )}
 

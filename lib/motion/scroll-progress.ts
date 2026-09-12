@@ -16,8 +16,3 @@ export const heroMotion = {
 export function pulseHero(strength = 1): void {
   heroMotion.impulse = Math.min(1.5, heroMotion.impulse + strength);
 }
-
-export function resetHeroMotion(): void {
-  heroMotion.progress = 0;
-  heroMotion.impulse = 0;
-}

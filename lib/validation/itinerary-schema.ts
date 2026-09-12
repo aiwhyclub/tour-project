@@ -140,13 +140,6 @@ export const RainyDayPlanSchema = z.object({
     .describe('비 올 때의 일반 조언'),
 });
 
-export const DisclaimerSchema = z.object({
-  id: z.string().min(1).max(40),
-  scope: z.enum(['budget', 'hours', 'availability', 'general']),
-  severity: z.enum(['info', 'warning']),
-  message: z.string().min(1).max(200),
-});
-
 export const PlanSummarySchema = z.object({
   title: z.string().min(1).max(50).describe('여행 제목'),
   destination: z.string().min(1).max(40),
@@ -159,13 +152,6 @@ export const PlanSummarySchema = z.object({
   headline: z.string().min(1).max(100).describe('이 여행을 한 문장으로'),
   highlights: z.array(z.string().max(60)).min(3).max(5).describe('핵심 포인트'),
   // totalBudget / perPersonBudget 은 받지 않는다. 서버가 예산 항목에서 계산한다 (R8).
-});
-
-export const GenerationMetaSchema = z.object({
-  model: z.string().max(60),
-  generatedAt: z.string().max(40),
-  degraded: z.boolean(),
-  degradedReasons: z.array(z.string().max(150)).max(5),
 });
 
 /**
@@ -219,11 +205,17 @@ export const ItineraryDraftRepairSchema = z.object({
   }),
 });
 
-/** 서버 주입까지 끝난 최종 형태. 클라이언트가 받는 것. */
-export const ItineraryPlanSchema = ItineraryDraftSchema.extend({
-  schemaVersion: z.literal(1),
-  disclaimers: z.array(DisclaimerSchema).min(1),
-  generation: GenerationMetaSchema,
-});
-
-export type ItineraryPlanParsed = z.infer<typeof ItineraryPlanSchema>;
+/*
+ * 여기에 ItineraryPlanSchema 가 있었다. "서버 주입까지 끝난 최종 형태"라는 주석을
+ * 달고 ItineraryDraftSchema.extend({...}) 로 정의돼 있었는데, 그것은 모델에게
+ * 요청하는 평탄한 초안 형태(costAmount: number)이지 클라이언트가 받는 형태
+ * (cost: MoneyEstimate)가 아니다. 이름을 믿고 normalizePlan 의 결과를 이 스키마로
+ * 검증하면 반드시 실패한다. 호출부가 0건이라 아직 아무도 걸려들지 않았을 뿐이다.
+ *
+ * 클라이언트가 받는 형태의 단일 진실원천은 types/itinerary.ts 의 ItineraryPlan 이고,
+ * 그 형태를 만드는 유일한 지점은 lib/gemini/normalize.ts 다. 두 벌로 나누지 않는다.
+ *
+ * 그 스키마만 쓰던 DisclaimerSchema 와 GenerationMetaSchema 도 함께 뺐다. 모델에게
+ * 요구하지 않는 필드(면책·생성 메타)를 Zod 로 한 벌 더 적어 두면, types/itinerary.ts
+ * 와 조용히 어긋나는 두 번째 정의가 될 뿐이다.
+ */

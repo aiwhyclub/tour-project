@@ -80,6 +80,3 @@ export class PlanError extends Error {
     this.fields = fields;
   }
 }
-
-export const toHttpStatus = (code: ApiErrorCode): number => ERROR_SPECS[code].status;
-export const isRetryable = (code: ApiErrorCode): boolean => ERROR_SPECS[code].retryable;

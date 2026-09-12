@@ -16,13 +16,18 @@ import { tripDays, type PlanRequestInput } from '@/lib/validation/plan-request';
  * 문장으로만 말해 왔는데(S4), 사용자가 그것을 확인할 방법이 없었다.
  * 조건을 그대로 보여 주면 말이 아니라 사실이 된다.
  *
- * ── 린트 주의 ──────────────────────────────────────────────────────────
- * eslint.config.mjs 의 가드레일 2(R1)는 식별자 이름으로 동작한다.
- * `request.budget.amount` 는 허용된다 — 속성명이 budget 이고, 이 값은 사용자가
- * 직접 적은 입력이지 서버가 만든 추정값(MoneyEstimate)이 아니므로 Money.tsx 를
- * 거칠 대상이 아니다. 다만 `const total = request.budget; total.amount` 처럼
- * 중간 변수를 두면 즉시 규칙에 걸린다. 이 파일에서 total·estimate·cost·
- * perPerson·totalBudget·perPersonBudget·daySubtotal 이름의 지역변수를 만들지 말 것.
+ * ── 린트 주의 (실측 확인, 2026-09-12) ──────────────────────────────────
+ * eslint.config.mjs 의 가드레일 2(R1)가 금지하는 것은
+ * `<무엇>.<cost|total|estimate|perPerson|totalBudget|perPersonBudget|daySubtotal>.amount`
+ * 형태다. 중간 속성의 이름을 본다.
+ *
+ * 그래서 `request.budget.amount` 는 통과한다 — 중간 속성이 budget 이기 때문이다.
+ * 통과해야 하는 것이 맞다. 이 값은 사용자가 직접 적은 입력이지 서버가 만든
+ * 추정값(MoneyEstimate)이 아니므로 Money.tsx 를 거칠 대상이 아니다.
+ *
+ * 걸리는 쪽은 `plan.budget.total.amount` 처럼 중간 속성이 목록에 든 경우다.
+ * 이 파일에서 `{ total: ... }` 같은 중간 객체를 만들어 그 아래 amount 를 읽지 말 것.
+ * rangeLow·rangeHigh·verifyHint·hoursNote 는 객체 이름과 무관하게 전부 금지다.
  */
 export function InputSummary({ request }: { request: PlanRequestInput | null }) {
   if (!request) return null;
