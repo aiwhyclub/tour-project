@@ -49,13 +49,30 @@ export function HeroSection({ onStart }: { onStart: () => void }) {
             return;
           }
 
-          // 진입 연출 — 제목/부제/CTA 를 차례로 올린다.
-          gsap.from('[data-hero-copy] > *', {
-            y: 26,
-            opacity: 0,
-            duration: 0.85,
-            stagger: 0.12,
-            ease: 'power3.out',
+          /*
+           * 진입 연출 — 제목/부제/CTA 를 차례로 올린다.
+           *
+           * h1 만 opacity 를 건드리지 않는다. h1 이 LCP 요소인데(실측 확인),
+           * opacity 를 0 에서 올리면 브라우저는 페이드가 끝날 때까지 "아직 그려지지
+           * 않았다"고 보고 LCP 기록을 미룬다. 실측: 데스크톱 LCP 292ms -> 1,788ms.
+           * FCP 는 두 경우 모두 ~285ms 로 같았으니 순전히 연출이 만든 지연이다.
+           *
+           * design/motion-spec.md 149 행이 "z=30 카피는 SSR 시점에 최종 텍스트로
+           * 렌더된다"고 LCP 보호를 명시하는데, opacity 페이드가 그 전제를 깨고 있었다.
+           * transform 은 페인트 상태를 바꾸지 않으므로 y 이동은 LCP 에 영향이 없다.
+           */
+          const copyItems = Array.from(
+            scope.current?.querySelectorAll<HTMLElement>('[data-hero-copy] > *') ?? [],
+          );
+          copyItems.forEach((el, i) => {
+            const isLcpElement = el.tagName === 'H1';
+            gsap.from(el, {
+              y: 26,
+              ...(isLcpElement ? {} : { opacity: 0 }),
+              duration: 0.85,
+              delay: i * 0.12,
+              ease: 'power3.out',
+            });
           });
 
           // 모바일은 핀·스크럽 없이 배경만 아주 얕게 움직인다.
