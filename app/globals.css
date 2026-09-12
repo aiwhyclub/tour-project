@@ -1,0 +1,241 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   여행 큐레이션 — 디자인 토큰
+   방향: refero "Mercury"(차분·신뢰·블루아워) × "Air"(개방·유리질)
+   규칙: 바다색 계열 파랑이 기준색, 강조색은 정확히 하나(coral), 배경은 흰색에 가깝게
+   --------------------------------------------------------------------------- */
+@theme {
+  /* --- 기준색: ocean (바다색 계열 파랑) --- */
+  --color-ocean-50: #eff8ff;
+  --color-ocean-100: #dbeefe;
+  --color-ocean-200: #bfe2fe;
+  --color-ocean-300: #92d0fd;
+  --color-ocean-400: #5fb6fa;
+  --color-ocean-500: #3897f0;
+  /* ocean-600 은 흰 글자 배경으로 4.40:1 로 미달한다.
+     흰 글자를 얹는 채움에는 ocean-700 이상을 쓸 것. */
+  --color-ocean-600: #1f77e0;
+  --color-ocean-700: #1a5fbe;
+  --color-ocean-800: #1b4f9a;
+  --color-ocean-900: #10355f;
+  --color-ocean-950: #0a2038;
+
+  /* --- 강조색: 정확히 하나만 (sunset coral) ---
+     사용 규칙 (WCAG 실측 기준, 회귀 방지용):
+       accent-500 #ff6b4a  흰 배경 2.82:1 — 채움(불릿·장식)에만. 글자색 금지.
+       accent-600 #ed4a26  흰 배경 3.74:1 — 본문 크기 글자색 금지.
+       accent-700 #c5371a  흰 배경 5.34:1 / 흰 글자 배경 5.34:1 — 글자와 배경 모두 안전.
+     강조색을 텍스트로 쓰거나 흰 글자의 배경으로 쓸 때는 accent-700 을 쓸 것. */
+  --color-accent-50: #fff3f0;
+  --color-accent-100: #ffe3dc;
+  --color-accent-300: #ffab93;
+  --color-accent-500: #ff6b4a;
+  --color-accent-600: #ed4a26;
+  --color-accent-700: #c5371a;
+
+  /* --- 중립: 흰색에 가까운 배경 --- */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f8fafc;
+  --color-surface-sunken: #f1f5f9;
+  --color-line: #e2e8f0;
+  /* 장식용 구분선. 비인터랙티브 요소에만 쓴다 (WCAG 1.4.11 대상 아님). */
+  --color-line-strong: #cbd5e1;
+  /* 인터랙티브 컨트롤(입력·칩·체크박스)의 경계.
+     WCAG 1.4.11은 컨트롤을 식별하는 시각 정보에 3:1을 요구한다.
+     line-strong(#cbd5e1)은 흰 배경에서 1.48:1 로 미달이라 별도 토큰을 둔다.
+     #78889c = 흰 배경 3.62:1 / surface-subtle 3.46:1. */
+  --color-control-border: #78889c;
+  --color-ink: #0f172a;
+  --color-ink-soft: #475569;
+  --color-ink-muted: #64748b;
+  --color-ink-inverse: #ffffff;
+
+  /* --- 상태색 --- */
+  --color-warn-bg: #fffbeb;
+  --color-warn-line: #fde68a;
+  --color-warn-ink: #92400e;
+  --color-danger-bg: #fef2f2;
+  --color-danger-line: #fecaca;
+  --color-danger-ink: #b91c1c;
+  --color-ok-bg: #f0fdf4;
+  --color-ok-ink: #15803d;
+
+  /* --- 타이포: 한글 고딕. 제목/본문 크기 차이를 뚜렷하게 --- */
+  --font-sans:
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+
+  --text-display: 4rem;
+  --text-display--line-height: 1.12;
+  --text-display--letter-spacing: -0.035em;
+  --text-display--font-weight: 800;
+
+  --text-h1: 2.75rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h1--font-weight: 800;
+
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 1.3;
+  --text-h2--letter-spacing: -0.022em;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 1.3125rem;
+  --text-h3--line-height: 1.4;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h3--font-weight: 700;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.7;   /* 한글 본문 가독성 최소선 */
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.6;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+
+  /* --- 형태 --- */
+  --radius-card: 1.25rem;
+  --radius-field: 0.75rem;
+  --radius-chip: 999px;
+
+  --shadow-card: 0 1px 2px rgb(16 53 95 / 0.04), 0 8px 24px -12px rgb(16 53 95 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(16 53 95 / 0.06), 0 18px 40px -16px rgb(16 53 95 / 0.22);
+
+  /* --- Hero 레이어 z축 (design/screen-states.md의 레이어 표와 1:1 대응) ---
+     캔버스가 스크림 '아래'에 있는 것이 핵심이다.
+     위에 두면 흰 입자가 스크림을 통과해 글자 뒤 배경을 밝힌다 — 실측 결과
+     캔버스를 끄면 텍스트 대비가 13~15, 켜면 4.5~5.2 로 떨어졌다.
+     즉 대비 여유 전체가 무작위 입자 배치에 의존하게 된다(입자는 로드마다 랜덤).
+     아래로 내리면 스크림이 입자까지 덮어 텍스트 대비가 3D 내용과 무관해진다. */
+  --z-hero-video: 0;
+  --z-hero-canvas: 10;
+  --z-hero-scrim: 20;
+  --z-hero-copy: 30;
+  --z-hero-cue: 40;
+
+  /* --- 모션 --- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 180ms;
+  --duration-base: 320ms;
+  --duration-slow: 550ms;
+}
+
+/* ---------------------------------------------------------------------------
+   전역 기본값
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* R7: 모션 저감 요청 시 스크롤 점프까지 제거 */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* 한글은 단어 중간에서 끊지 않아야 표가 깨지지 않는다 */
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* S9: 390px에서 가로 스크롤 0 — 넘칠 수 있는 요소의 기본 방어선 */
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  /* 포커스 표시도 1.4.11 대상(3:1)이다.
+     ocean-500 은 흰 배경 3.06:1 이지만 surface-subtle 위에서 2.93:1 로 미달해
+     ocean-600(흰 4.40 / 연회색 4.20)으로 올린다. */
+  :focus-visible {
+    outline: 3px solid var(--color-ocean-600);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* 키보드 사용자를 위한 본문 바로가기 (S11) */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-ocean-700);
+    color: var(--color-ink-inverse);
+    border-radius: var(--radius-field);
+  }
+}
+
+@layer utilities {
+  /* 데스크톱 확장 타이포 — 모바일 기본값 위에 얹는다 */
+  .text-display-responsive {
+    font-size: 2.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+  @media (min-width: 768px) {
+    .text-display-responsive {
+      font-size: var(--text-display);
+      line-height: var(--text-display--line-height);
+      letter-spacing: var(--text-display--letter-spacing);
+    }
+  }
+
+  .glass-panel {
+    background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(1.3);
+    border: 1px solid color-mix(in srgb, var(--color-surface) 60%, var(--color-line));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero Ken Burns — 배경 사진에 느린 줌·패닝을 걸어 "움직이는 첫인상"을 만든다.
+   영상 대체 구현이므로 모션 저감 시에는 클래스 자체가 붙지 않는다 (R7).
+   --------------------------------------------------------------------------- */
+@keyframes hero-kenburns-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.16) translate3d(-1.5%, -1.5%, 0);
+  }
+}
+
+.hero-kenburns {
+  will-change: transform;
+}
+
+.hero-kenburns-active {
+  animation: hero-kenburns-drift 9s var(--ease-out-soft) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns-active {
+    animation: none;
+  }
+}
