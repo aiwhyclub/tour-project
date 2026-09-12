@@ -2,12 +2,16 @@
   "name": "tour-project",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "audit:schema": "vitest run lib/gemini/response-schema.test.ts --reporter=verbose",
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
@@ -36,7 +40,8 @@
     "eslint-config-next": "15.5.25",
     "tailwindcss": "4.3.3",
     "typescript": "^5",
-    "typescript-eslint": "^8.70.0"
+    "typescript-eslint": "^8.70.0",
+    "vitest": "4.1.11"
   },
   "engines": {
     "node": ">=20"

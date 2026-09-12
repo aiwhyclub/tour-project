@@ -28,7 +28,7 @@ export interface PlanState {
   error: PlanErrorState | null;
 }
 
-type Action =
+export type Action =
   | { type: 'submit'; request: PlanRequestInput }
   | { type: 'succeed'; plan: ItineraryPlan }
   | { type: 'fail'; error: PlanErrorState }
@@ -36,14 +36,15 @@ type Action =
   | { type: 'retry' }
   | { type: 'cancel' };
 
-const initialState: PlanState = {
+/** 테스트가 직접 겨냥할 수 있도록 export 한다. reducer 는 순수 함수라 DOM 이 필요 없다. */
+export const initialState: PlanState = {
   phase: 'input',
   lastRequest: null,
   plan: null,
   error: null,
 };
 
-function reducer(state: PlanState, action: Action): PlanState {
+export function reducer(state: PlanState, action: Action): PlanState {
   switch (action.type) {
     case 'submit':
       return { ...state, phase: 'loading', lastRequest: action.request, error: null };

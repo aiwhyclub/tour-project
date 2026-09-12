@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # package.json 의 packageManager 필드에서 pnpm 12.3.4 를 자동으로 집는다.
+      - uses: pnpm/action-setup@v4
+
+      # engines 는 >=20 이지만 배포 대상(Vercel)이 Node 22 다.
+      # CI 는 실제 런타임과 같은 메이저를 써야 의미가 있다.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # --frozen-lockfile 이라야 pnpm-workspace.yaml 의 overrides(react 19.2.8 고정,
+      # postcss 보안 패치)와 allowBuilds 가 그대로 적용된다.
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+
+      - run: pnpm typecheck
+
+      - run: pnpm test
+
+      # build 가 server-only 경계(SEC2/SEC3)를 검사하는 유일한 스텝이다.
+      # 클라이언트 컴포넌트가 lib/env.ts 를 import 해도 lint 와 typecheck 는 통과하지만
+      # build 는 실패한다.
+      #
+      # PLAN_SOURCE 를 명시해 빌드를 결정론적으로 만든다. auto + 키 없음에 기대면
+      # 나중에 시크릿이 생겼을 때 CI 동작이 조용히 바뀐다.
+      - run: pnpm build
+        env:
+          PLAN_SOURCE: mock
