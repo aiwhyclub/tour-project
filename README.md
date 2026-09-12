@@ -49,6 +49,13 @@ pnpm dev
 | `pnpm test` | Vitest 단위 테스트 |
 | `pnpm audit:schema` | Gemini 스키마 스모크 점검 리포트만 출력 |
 | `pnpm analyze` | 번들 분석 (`.next/analyze/client.html`) |
+| `./scripts/check-live.sh` | 배포본 스모크 점검 (접근·헤더·폰트·서버 검증) |
+| `./scripts/check-live.sh --full` | 위 + 불변식 검증 (R1 · R5 · R8 · S16) |
+| `./scripts/build-font.py` | Pretendard 서브셋 재빌드 (uvx + fonttools) |
+
+`check-live.sh` 는 기본으로 배포된 프로덕션 별칭을 본다. 로컬 프로덕션 빌드에
+대해 돌리려면 URL 을 넘긴다 — `./scripts/check-live.sh http://localhost:3100 --full`.
+판정 기준과 SKIP 의 의미는 [`docs/09_점검체크리스트.md`](docs/09_점검체크리스트.md) §3.
 
 ## 하는 것 / 하지 않는 것
 
