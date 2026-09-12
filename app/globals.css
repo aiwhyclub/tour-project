@@ -158,6 +158,27 @@
 /* ---------------------------------------------------------------------------
    전역 기본값
    --------------------------------------------------------------------------- */
+/*
+ * 포커스 표시 — 레이어 밖에 둔다.
+ *
+ * 포커스 표시도 WCAG 1.4.11 대상(3:1)이다. ocean-500 은 흰 배경 3.06:1 이지만
+ * surface-subtle 위에서 2.93:1 로 미달해 ocean-600 으로 올렸다
+ * (흰 4.40 / 연회색 4.20 / 헤더 남색 3.74).
+ *
+ * @layer base 안에 두면 Tailwind 유틸리티 레이어에 밀린다. 실측한 증상:
+ *   - 선택된 칩·예산 기준 라디오: 글자색이 흰색이라 outline-color 가 currentColor 로
+ *     되돌아가 흰 카드 위에 흰 아웃라인이 그려졌다. 대비 1.0 — 보이지 않았다.
+ *   - 텍스트·날짜·숫자 입력: outline-offset 이 0 으로 되돌아갔다.
+ * 레이어 밖 규칙은 모든 레이어를 이기므로, 컴포넌트가 클래스를 잊어도
+ * 포커스 표시가 조용히 사라지지 않는다.
+ */
+:focus-visible {
+  outline: 3px solid var(--color-ocean-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -194,15 +215,6 @@
   canvas,
   svg {
     max-width: 100%;
-  }
-
-  /* 포커스 표시도 1.4.11 대상(3:1)이다.
-     ocean-500 은 흰 배경 3.06:1 이지만 surface-subtle 위에서 2.93:1 로 미달해
-     ocean-600(흰 4.40 / 연회색 4.20)으로 올린다. */
-  :focus-visible {
-    outline: 3px solid var(--color-ocean-600);
-    outline-offset: 2px;
-    border-radius: 4px;
   }
 
   /* 키보드 사용자를 위한 본문 바로가기 (S11) */

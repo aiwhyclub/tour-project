@@ -162,8 +162,7 @@ const NOTE_GROUPS: readonly { title: string; notes: readonly Note[] }[] = [
 
 /** 링크 스타일. hover 는 밑줄만 — ink-soft 가 이미 7.24 라 더 어두워질 여지가 없다 (§4-2). */
 const linkClass =
-  'inline-flex min-h-[44px] items-center text-sm text-ink-soft underline-offset-4 hover:underline ' +
-  'focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-ocean-600';
+  'inline-flex min-h-[44px] items-center text-sm text-ink-soft underline-offset-4 hover:underline';
 
 export function SiteFooter() {
   const scope = useRef<HTMLElement>(null);
@@ -372,7 +371,7 @@ export function SiteFooter() {
           <button
             type="button"
             onClick={toTop}
-            className="inline-flex min-h-[44px] items-center gap-1.5 text-xs text-ink-soft underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-ocean-600"
+            className="inline-flex min-h-[44px] items-center gap-1.5 text-xs text-ink-soft underline-offset-4 hover:underline"
           >
             맨 위로
             <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">

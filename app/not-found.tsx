@@ -17,7 +17,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="mt-7 inline-flex items-center justify-center rounded-[var(--radius-field)] bg-ocean-700 px-6 py-3.5 text-body font-bold text-white transition-colors hover:bg-ocean-800 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-ocean-600"
+          className="mt-7 inline-flex items-center justify-center rounded-[var(--radius-field)] bg-ocean-700 px-6 py-3.5 text-body font-bold text-white transition-colors hover:bg-ocean-800"
         >
           처음 화면으로
         </Link>

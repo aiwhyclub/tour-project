@@ -32,7 +32,9 @@ import { Card } from '@/components/ui/Card';
 const inputClass =
   'w-full rounded-[var(--radius-field)] border border-control-border bg-surface px-4 py-3 ' +
   'text-body text-ink placeholder:text-ink-muted ' +
-  'focus:border-ocean-600 focus:outline-none focus:ring-4 focus:ring-ocean-100 ' +
+  // 포커스 표시는 globals.css 의 전역 :focus-visible 규칙이 담당한다.
+  // 여기서 outline-none 을 쓰면 그 규칙이 죽는다.
+  'focus:border-ocean-600 ' +
   'aria-[invalid=true]:border-danger-line aria-[invalid=true]:bg-danger-bg';
 
 export interface PlanFormProps {
