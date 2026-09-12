@@ -1,0 +1,20 @@
+packages:
+  - '.'
+
+# @react-three/fiber@9 declares peer react ">=19 <19.3".
+# React 19.3.0 is already published, so an unpinned range breaks the reconciler.
+# Deps are pinned exactly in package.json; this override is the second guard.
+overrides:
+  react: '19.2.8'
+  react-dom: '19.2.8'
+  # next 가 끌고 오는 postcss 에 sourceMappingURL 경로 순회 취약점이 있다
+  # (GHSA-6g55-p6wh-862q 외 3건). 패치 버전으로 올린다.
+  postcss: '>=8.5.23'
+
+# Native/codegen postinstall steps these packages genuinely need.
+# NOTE: minimumReleaseAge (supply-chain policy) is deliberately NOT bypassed —
+# @google/genai and zod are pinned to versions that already satisfy it.
+allowBuilds:
+  '@google/genai': true
+  protobufjs: true
+  unrs-resolver: true
