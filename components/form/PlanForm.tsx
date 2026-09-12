@@ -101,13 +101,27 @@ export function PlanForm({
       const fieldErrors = toFieldErrors(result.error);
       setClientErrors(fieldErrors);
       // 첫 오류 필드로 포커스를 옮긴다 (S11: 키보드만으로 수정 가능해야 한다)
+      //
+      // 오류 키와 id 가 같은 컨트롤을 먼저 찾는다. data-field 래퍼만 보면
+      // 한 래퍼에 두 입력이 들어 있는 경우(일정 = startDate + endDate)를 놓친다.
+      // 실제로 endDate 에 걸리는 오류 세 가지(종료일<시작일 · 여행 기간 초과 ·
+      // 과거 시작일)에서 포커스가 <body> 에 남아 있었다.
       const firstKey = Object.keys(fieldErrors)[0];
       if (firstKey) {
-        const target = document.querySelector<HTMLElement>(
-          '[data-field="' + firstKey.split('.')[0] + '"]',
-        );
-        target?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-        target?.querySelector<HTMLElement>('input, button, select, textarea')?.focus();
+        const key = firstKey.split('.')[0] ?? '';
+        const control =
+          document.getElementById(key) ??
+          document
+            .querySelector<HTMLElement>('[data-field="' + key + '"]')
+            ?.querySelector<HTMLElement>('input, button, select, textarea') ??
+          null;
+
+        const wrapper =
+          control?.closest<HTMLElement>('[data-field]') ??
+          document.querySelector<HTMLElement>('[data-field="' + key + '"]');
+
+        wrapper?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        control?.focus();
       }
       return;
     }
