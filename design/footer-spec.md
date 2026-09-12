@@ -100,20 +100,33 @@ PRD 5-2 "경험 품질 요구"의 **마무리** 항목("페이지 하단이 덧�
 
 **존재하지 않는 기능으로 이어지는 링크를 절대 만들지 않는다.** 예약·결제·로그인·지도로 이어지는 동선이 0건이어야 한다 (S16).
 
-| 컬럼 | 제목 | 항목 | 링크 대상 |
+| 컬럼 | 제목 | 항목 | 링크 대상 (2026-09-12 구현 기준) |
 |---|---|---|---|
-| 1 | **여행 큐레이션** | 서비스 소개 | `/#intro` (같은 페이지 앵커) |
-| | | 만드는 방식 | `/#how` (같은 페이지 앵커) |
-| | | 다루지 않는 것 | `/#scope` (같은 페이지 앵커) |
-| 2 | **결과에 대하여** | 추정값이란 | `/#estimate` |
-| | | 확신도 표시 읽는 법 | `/#confidence` |
-| | | 예산 계산 방식 | `/#budget-method` |
-| 3 | **만든 재료** | 사용한 오픈소스 | `/#oss` |
-| | | 이미지·영상 출처 | `/assets-manifest.json` (기계 판독 원본) |
-| | | 글꼴 라이선스 | `/#font-license` |
-| 4 | **접근성** | 모션 저감 지원 | `/#reduced-motion` |
-| | | 키보드 조작 | `/#keyboard` |
-| | | 대비 기준 | `/#contrast` |
+| 1 | **여행 큐레이션** | 서비스 소개 | `#footer-intro` |
+| | | 만드는 방식 | `#footer-how` |
+| | | 다루지 않는 것 | `#footer-scope` |
+| 2 | **결과에 대하여** | 추정값이란 | `#footer-estimate` |
+| | | 확신도 표시 읽는 법 | `#footer-confidence` |
+| | | 예산 계산 방식 | `#footer-budget-method` |
+| 3 | **만든 재료** | 사용한 오픈소스 | `#footer-oss` |
+| | | **이미지 출처** | `/assets-manifest.json` (기계 판독 원본) |
+| | | 글꼴 라이선스 | `#footer-font-license` |
+| 4 | **접근성** | 모션 저감 지원 | `#footer-reduced-motion` |
+| | | 키보드 조작 | `#footer-keyboard` |
+| | | 대비 기준 | `#footer-contrast` |
+
+> **링크 대상을 바꾼 이유.** 초안은 `/#intro` · `/#how` 처럼 본문 섹션 앵커를
+> 가리켰지만 **그 섹션들이 이 앱에 없다.** `#plan-form` 과 `#result` 도 화면 상태에
+> 따라 있다 없다 한다. 죽은 앵커는 F3("존재하지 않는 문서 링크")과 같은 죄이고,
+> 11개 섹션을 새로 만드는 것은 새 기능이다.
+>
+> 그래서 링크 컬럼을 **목차**로 두고, 목적지를 푸터 자신의 안내 영역(D·E)에 만들었다.
+> F-46 이 이미 요구하는 범위 고지와 에셋 출처를 항목별로 펼친 것이며, 문구는 전부
+> 프로젝트에 이미 있는 사실(`normalize.ts` 의 면책 문구, `CONFIDENCE_LABEL`,
+> TRD 9-3)에서 가져왔다. 새 제품 기능은 0건이다.
+>
+> 실측: 1440px 에서 노출 링크 14개(컬럼 12 + 안내 영역 2), **전부 실제 요소로 해석**,
+> 외부 링크 0 · `target="_blank"` 0 · 예약·결제·로그인·지도 동선 0.
 
 | 규칙 | 내용 |
 |---|---|
@@ -304,8 +317,7 @@ R6이 요구하는 **사람 판독용 표기**다. 기계 판독용 원본은 `p
 | 자산 | 출처 | 라이선스 | 수정 |
 |---|---|---|---|
 | Hero 배경 사진 3장 | Pexels | Pexels License | 리사이즈(w=1200)·압축만 |
-| 중간 섹션 강조 사진 | Pexels | Pexels License | 리사이즈(w=1200)·압축만 |
-| Pretendard Variable | orioncactus/pretendard | SIL OFL 1.1 | 한글 2,350자 서브셋 |
+| Pretendard Variable | orioncactus/pretendard | SIL OFL 1.1 | weight 축 400~800 으로 좁히고 KS X 1001 한글 2,350자 서브셋. 303.1KB |
 | GSAP + ScrollTrigger/Flip/ScrollTo | GreenSock | GSAP 표준 라이선스 (Webflow 후원으로 전체 무료) | 없음 |
 | Three.js | mrdoob/three.js | MIT | 없음 |
 | React Three Fiber / drei | pmndrs | MIT | 없음 |

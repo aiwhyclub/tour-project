@@ -16,6 +16,20 @@
 > `text-body-lg` · `text-body-sm` · `text-caption` · `text-micro` · `text-num` · `text-h4` 는
 > **존재하지 않는 클래스다.** 실제 값은 [design-tokens.md](./design-tokens.md) §7을 보라.
 > 스케일 재정렬은 별도 작업으로 남겨 두었다.
+>
+> **문서 → 실제 매핑** (재정렬 전까지 이 표를 보고 읽을 것):
+>
+> | 문서의 토큰 | 실제로 쓸 것 |
+> |---|---|
+> | `text-body-lg` | `text-body` |
+> | `text-body-sm` · `text-caption` | `text-sm` |
+> | `text-micro` | `text-xs` |
+> | `text-h4` | `text-h3` |
+> | `text-num` | `text-sm tabular-nums` |
+>
+> 매핑이 있으면 §5·§6 의 컴포넌트 표를 그대로 두어도 오독하지 않는다.
+> 스케일 자체는 건드리지 않는다 — 재조정하면 `color-system.md` §5-4 의
+> Hero 대비 실측값이 전부 무효가 된다.
 
 ---
 
