@@ -130,16 +130,12 @@ export function BudgetTable({ budget }: { budget: BudgetTableData }) {
             >
               <span>
                 <span className="block text-body font-bold text-ink">{line.label}</span>
-                {/* 금액은 항상 Money 를 통해 렌더한다 (R1). 다만 같은 행의 총액이
-                    이미 신뢰도 배지를 달고 있으므로 여기서는 배지를 중복하지 않는다. */}
-                <span className="mt-1 flex flex-wrap items-center gap-x-1.5 text-xs text-ink-muted">
+                {/* 금액은 항상 Money 를 통해 렌더한다 (R1) — 배지를 포함해서다.
+                    같은 행에 총액 배지가 있다고 생략하면, 좁은 화면에서 두 금액이
+                    멀찍이 떨어져 "1인당 120,000원"만 확정처럼 읽힌다. */}
+                <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-ink-muted">
                   <span>1인당</span>
-                  <Money
-                    value={line.perPerson}
-                    size="sm"
-                    showRange={false}
-                    showBadge={false}
-                  />
+                  <Money value={line.perPerson} size="sm" showRange={false} />
                   <span>· {line.sharePercent.toFixed(1)}%</span>
                 </span>
               </span>
