@@ -84,6 +84,7 @@ pnpm dev
 | [docs/04_TRD.md](docs/04_TRD.md) | 아키텍처 · 확정 위험 7건 · 보안 SEC1~SEC15 |
 | [docs/05_개발계획.md](docs/05_개발계획.md) | EPIC 3 · STORY 55 · EPIC 밖 3단계 |
 | [docs/06_품질점검.md](docs/06_품질점검.md) | QA · 보안 검토(SEC1~15) · 성능 실측 · 수용한 편차 |
+| [docs/07_배포.md](docs/07_배포.md) | Vercel 배포 설정 · 빌드 실측 · 라이브 불변식 검증 · 접근 통제 |
 | [design/](design/) | 토큰 · 색 · 타이포 · 모션 · 화면 상태 · 푸터 사양 |
 
 ## 에셋 출처
