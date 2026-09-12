@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="여행 큐레이션">
+  <!--
+    파비콘. Next 15 가 app/icon.svg 를 보고 <link rel="icon"> 을 자동으로 주입한다.
+
+    글자를 쓰지 않는다. SVG 안의 <text> 는 뷰어의 폰트로 그려지므로 한글 글리프를
+    쓰려면 폰트를 통째로 임베드해야 한다. 순수 도형이면 어디서나 같게 보인다.
+
+    색은 app/globals.css 의 --color-ocean-700 / --color-accent-700 과 같은 값이다.
+    SVG 는 CSS 변수를 읽을 수 없어 리터럴로 적는다. 토큰을 바꾸면 여기도 바꿀 것.
+  -->
+  <rect width="32" height="32" rx="7" fill="#1a5fbe" />
+  <circle cx="22" cy="11" r="3.6" fill="#c5371a" />
+  <path d="M4 21h24" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.95" />
+  <path d="M7 25.5h18" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.55" />
+</svg>
