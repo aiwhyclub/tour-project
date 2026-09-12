@@ -77,6 +77,16 @@ export async function POST(request: Request) {
     }
 
     /* --- 3. 서버 검증. 이 결과만 아래로 흘려보낸다 (R3) --- */
+
+    // Content-Type 검사 (docs/03_FRD.md 2-4). JSON.parse 가 우연히 통과하는 본문이
+    // 들어와도 계약을 어긴 요청은 받지 않는다. charset 파라미터는 허용한다.
+    const contentType = request.headers.get('content-type') ?? '';
+    if (!contentType.toLowerCase().trim().startsWith('application/json')) {
+      return fail('VALIDATION_FAILED', id, startedAt, {
+        _: '요청 형식이 올바르지 않습니다. Content-Type 은 application/json 이어야 합니다.',
+      });
+    }
+
     let body: unknown;
     try {
       body = JSON.parse(raw);
