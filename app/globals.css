@@ -1,6 +1,38 @@
 @import 'tailwindcss';
 
 /* ---------------------------------------------------------------------------
+   Pretendard — 저장소 자체 호스팅 (R6 · design/typography.md §1)
+
+   @theme 밖, @layer 밖의 최상위에 둔다. Tailwind v4 에서 레이어 안의 @font-face 는
+   레이어 우선순위 규칙에 걸려 적용 시점이 달라질 수 있다.
+
+   --font-sans 토큰은 이미 'Pretendard Variable' 을 1순위로 들고 있으므로
+   @theme 을 건드릴 필요가 없다. 그래서 next/font/local 이 아니라 생 @font-face 다
+   (next/font 는 @theme inline 배선과 <html className> 변경을 추가로 요구한다).
+
+   파일: weight 축을 실사용 구간 400~800 으로 좁히고 KS X 1001 완성형 2,350자 +
+   라틴 + 문장부호 + 통화기호로 서브셋한 가변 woff2. 302.7KB (목표 320KB 이하).
+   재생성 방법은 scripts/build-font.py 참조.
+
+   unicode-range 의 U+AC00-D7A3 는 현대 한글 11,172자 전체를 가리키지만 파일에는
+   그중 KS X 1001 2,350자만 있다. 의도된 것이다 — 범위에 해당하는 글자를 이 폰트가
+   못 그리면 브라우저가 스택의 다음 폰트로 내려간다. 2,350자 밖의 희귀 음절
+   (예: 힣)만 시스템 고딕으로 보인다. 11,172자를 전부 넣으면 1,157KB 가 된다.
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Pretendard Variable';
+  src: url('/fonts/PretendardVariable.subset.woff2') format('woff2-variations');
+  font-weight: 400 800;
+  font-style: normal;
+  /* LCP 요소가 Hero 텍스트다. block 이면 폰트 다운로드 시간만큼 LCP 가 밀린다. */
+  font-display: swap;
+  unicode-range:
+    U+0020-007E, U+00A0-00FF, U+20A9, U+2013-2014, U+2018-201D, U+2026,
+    U+2190, U+2192, U+25CB, U+26A0, U+2713, U+3000-303F, U+AC00-D7A3,
+    U+1100-11FF;
+}
+
+/* ---------------------------------------------------------------------------
    여행 큐레이션 — 디자인 토큰
    방향: refero "Mercury"(차분·신뢰·블루아워) × "Air"(개방·유리질)
    규칙: 바다색 계열 파랑이 기준색, 강조색은 정확히 하나(coral), 배경은 흰색에 가깝게

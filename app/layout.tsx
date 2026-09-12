@@ -18,6 +18,23 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
+      <head>
+        {/*
+          프리로드는 LCP 직결이라 선택이 아니다. LCP 요소가 Hero 텍스트이고
+          @font-face 는 CSS 파싱 뒤에야 발견되므로, 여기서 먼저 받아 두지 않으면
+          swap 구간이 그만큼 길어진다.
+
+          crossOrigin 은 같은 출처라도 반드시 있어야 한다 — 폰트는 CORS 모드로
+          가져오므로, 빠지면 프리로드한 것과 별개로 한 번 더 받는다.
+        */}
+        <link
+          rel="preload"
+          href="/fonts/PretendardVariable.subset.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>
         <a href="#main" className="skip-link">
           본문으로 건너뛰기
