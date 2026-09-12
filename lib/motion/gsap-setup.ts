@@ -3,12 +3,14 @@
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Flip } from 'gsap/Flip';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 /**
  * GSAP 플러그인 등록.
  * (GSAP 은 Webflow 후원으로 ScrollTrigger·Flip·ScrollTo 포함 전체가 무료다.)
+ *
+ * Flip 은 여기 없다 — 소비자가 DayCard 하나뿐이라 lib/motion/gsap-flip.ts 로 분리했다.
+ * 이 모듈은 거의 모든 화면이 import 하므로 여기 있는 것은 전부 초기 청크에 들어간다.
  *
  * 모듈 로드 시점에 등록한다 — useEffect 안에서 등록하면 늦다.
  * React 는 자식의 effect 를 부모보다 먼저 실행하므로, Provider 의 effect 에서
@@ -21,7 +23,7 @@ let registered = false;
 
 function register(): void {
   if (registered || typeof window === 'undefined') return;
-  gsap.registerPlugin(useGSAP, ScrollTrigger, Flip, ScrollToPlugin);
+  gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
   // iOS 주소창이 접히며 발생하는 리사이즈로 트리거가 재계산되는 것을 막는다.
   ScrollTrigger.config({ ignoreMobileResize: true });
   registered = true;
@@ -35,4 +37,4 @@ export function registerGsap(): void {
   register();
 }
 
-export { gsap, ScrollTrigger, Flip, ScrollToPlugin, useGSAP };
+export { gsap, ScrollTrigger, ScrollToPlugin, useGSAP };

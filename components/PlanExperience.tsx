@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef } from 'react';
 import { usePlanMachine } from '@/lib/state/plan-machine';
 import type { PlanRequestInput } from '@/lib/validation/plan-request';
@@ -12,9 +13,24 @@ import { HeroSection } from '@/components/hero/HeroSection';
 import { PlanForm } from '@/components/form/PlanForm';
 import { Reveal } from '@/components/motion/Reveal';
 import { LoadingView } from '@/components/state/LoadingView';
-import { ErrorView } from '@/components/state/ErrorView';
-import { ResultView } from '@/components/result/ResultView';
 import { ScrollTrigger } from '@/lib/motion/gsap-setup';
+
+/**
+ * 결과·오류 화면을 지연 청크로 뺀다.
+ *
+ * 둘 다 /api/plan 응답이 도착하기 전에는 렌더될 수 없다. 목업이 1.2초, 실연동이
+ * 30초 남짓 걸리므로 지연 로딩 비용이 사실상 0 이고, 그 대가로 결과 서브트리
+ * 전체(SummaryCard·DayCard·BudgetTable·PackingChecklist·RainyDayPanel·
+ * RegenerateBar·DisclaimerBanner 와 Flip)가 First Load JS 에서 빠진다.
+ *
+ * LoadingView 는 정적으로 둔다 — 제출하는 순간 그려져야 한다.
+ */
+const ResultView = dynamic(() =>
+  import('@/components/result/ResultView').then((m) => m.ResultView),
+);
+const ErrorView = dynamic(() =>
+  import('@/components/state/ErrorView').then((m) => m.ErrorView),
+);
 
 /**
  * 클라이언트 트리의 최상단. 화면 상태 기계를 소유한다.
@@ -31,6 +47,11 @@ export function PlanExperience() {
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
+
+      // 요청과 동시에 청크를 데워 둔다. 응답이 도착한 뒤에야 받기 시작하면
+      // 결과 화면이 한 틱 비어 보인다.
+      void import('@/components/result/ResultView');
+      void import('@/components/state/ErrorView');
 
       try {
         const response = await fetch('/api/plan', {

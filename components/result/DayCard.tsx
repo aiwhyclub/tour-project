@@ -1,7 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { gsap, useGSAP, Flip, ScrollTrigger } from '@/lib/motion/gsap-setup';
+import { gsap, useGSAP, ScrollTrigger } from '@/lib/motion/gsap-setup';
+import { Flip } from '@/lib/motion/gsap-flip';
 import { ACTIVITY_KIND_LABEL, DAY_PACE_LABEL, type DayPlan } from '@/types/itinerary';
 import { koreanDate } from '@/lib/format/date';
 import { Card } from '@/components/ui/Card';
