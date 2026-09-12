@@ -29,6 +29,7 @@ describe('reducer — 4상태 전이', () => {
       lastRequest: null,
       plan: null,
       error: null,
+      returnTo: 'input',
     });
   });
 
@@ -112,5 +113,41 @@ describe('reducer — 불변성', () => {
   it('알 수 없는 액션은 같은 상태를 그대로 돌려준다', () => {
     const s = reducer(initialState, { type: 'nope' } as never);
     expect(s).toBe(initialState);
+  });
+});
+
+describe('returnTo — 오버레이 뒤에 무엇을 남길지', () => {
+  const toResult = () =>
+    reducer(reducer(initialState, { type: 'submit', request }), {
+      type: 'succeed',
+      plan,
+    });
+
+  it('제출은 언제나 폼에서 출발하므로 input 이다', () => {
+    expect(reducer(initialState, { type: 'submit', request }).returnTo).toBe('input');
+  });
+
+  it('결과 화면에서 [다시 만들기] 를 누르면 결과를 뒤에 남긴다', () => {
+    const s = reducer(toResult(), { type: 'retry' });
+    expect(s.phase).toBe('loading');
+    expect(s.returnTo).toBe('result');
+  });
+
+  it('오류 화면에서 [다시 시도] 를 누르면 폼을 뒤에 남긴다', () => {
+    const errored = reducer(
+      reducer(initialState, { type: 'submit', request }),
+      { type: 'fail', error },
+    );
+    expect(reducer(errored, { type: 'retry' }).returnTo).toBe('input');
+  });
+
+  it('결과를 본 뒤 조건을 고쳐 다시 제출하면 폼으로 되돌아온다', () => {
+    const edited = reducer(toResult(), { type: 'editConditions' });
+    expect(reducer(edited, { type: 'submit', request }).returnTo).toBe('input');
+  });
+
+  it('보관한 요청이 없어 입력으로 떨어질 때도 input 이다', () => {
+    const errored: PlanState = { ...initialState, phase: 'error', error };
+    expect(reducer(errored, { type: 'retry' }).returnTo).toBe('input');
   });
 });

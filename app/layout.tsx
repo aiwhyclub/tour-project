@@ -36,9 +36,12 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <a href="#main" className="skip-link">
-          본문으로 건너뛰기
-        </a>
+        {/*
+          "본문으로 건너뛰기" 링크는 여기가 아니라 PlanExperience 의 inert 래퍼 안에 있다.
+          처리 중 오버레이가 열리면 본문 전체가 inert 가 되는데, 링크만 밖에 남으면
+          Tab 으로 거기까지 나갈 수 있고 눌러 봐야 inert 인 #main 으로 간다.
+          본문이 막히면 본문 건너뛰기도 함께 막히는 것이 맞다.
+        */}
         {children}
       </body>
     </html>
