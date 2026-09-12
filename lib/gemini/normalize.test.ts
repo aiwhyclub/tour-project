@@ -379,6 +379,13 @@ describe('면책 주입 — 모델이 뭐라고 쓰든 붙는다', () => {
   it('사유가 없으면 괄호를 만들지 않는다', () => {
     expect(run(draft(), request(), true, []).disclaimers[4]?.message).not.toContain('(');
   });
+
+  it('사유가 여러 개면 쉼표로 잇는다', () => {
+    const plan = run(draft(), request(), true, ['준비물 5개 (권장 6개 이상)', '일정 항목 2건 제외']);
+    expect(plan.disclaimers[4]?.message).toContain(
+      '(준비물 5개 (권장 6개 이상), 일정 항목 2건 제외)',
+    );
+  });
 });
 
 describe('요약 — 요청과 어긋날 수 없는 값은 요청을 신뢰한다', () => {

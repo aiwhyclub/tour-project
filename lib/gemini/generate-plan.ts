@@ -352,7 +352,38 @@ function repairPartial(value: unknown): RepairOutcome | null {
   const result = ItineraryDraftRepairSchema.safeParse(patched);
   if (!result.success) return null;
 
-  return { draft: result.data, degraded: true, reasons };
+  /*
+   * 가지치기로 버린 것이 없는데도 여기까지 왔다면, 엄격 스키마와 관대 스키마의
+   * 차이는 최소 개수뿐이다. 그것을 말해 주지 않으면 사용자는 사유가 비어 있는
+   * "생성 결과 일부가 온전하지 않아 보정했습니다" 경고만 보게 된다.
+   *
+   * 실제로 그랬다. 실연동 첫 호출에서 준비물이 5개(최소 6개)로 왔고, 나머지
+   * 블록은 전부 최소치를 넘겼는데도 사유 없는 경고가 붙었다. 멀쩡한 일정에
+   * 설명 없는 경고를 붙이면 경고 자체가 신뢰를 잃는다 (F-25).
+   */
+  const d = result.data;
+  const thinDays = d.days.filter((day) => day.items.length < 3).length;
+  if (thinDays > 0) reasons.push('일정이 3개 미만인 날 ' + thinDays + '일');
+  if (d.budget.lines.length < 3) {
+    reasons.push('예산 항목 ' + d.budget.lines.length + '개 (권장 3개 이상)');
+  }
+  if (d.checklist.items.length < 6) {
+    reasons.push('준비물 ' + d.checklist.items.length + '개 (권장 6개 이상)');
+  }
+  if (d.rainyDay.alternatives.length < 2) {
+    reasons.push('우천 대안 ' + d.rainyDay.alternatives.length + '건 (권장 2건 이상)');
+  }
+  if (d.summary.highlights.length < 3) {
+    reasons.push('핵심 포인트 ' + d.summary.highlights.length + '개 (권장 3개 이상)');
+  }
+
+  // 그래도 짚이는 게 없으면 최소한 형식 문제였다는 사실은 밝힌다.
+  // 내부 검증 메시지는 넣지 않는다 (R2).
+  if (reasons.length === 0) {
+    reasons.push('응답 일부가 형식에 맞지 않아 보정');
+  }
+
+  return { draft: d, degraded: true, reasons };
 }
 
 function parseDraft(text: string): { draft: ItineraryDraft } | { issues: string } {
